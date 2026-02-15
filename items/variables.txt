@@ -1,0 +1,109 @@
+{
+  "first": 20,
+  "filterBy": {
+    "and": [
+      {
+        "timestamp": {
+          "inLast": {
+            "amount": 30,
+            "unit": "DurationFilterValueUnitDays"
+          }
+        },
+        "origin": {
+          "equals": [
+            "WIZ_CODE_ANALYZER",
+            "WIZ_CLI"
+          ]
+        },
+        "kind": {
+          "equals": [
+            "CI_CD_SCAN"
+          ]
+        },
+        "cicdScan": {
+          "trigger": {
+            "equals": [
+              "USER_INITIATED"
+            ]
+          }
+        }
+      },
+      {
+        "or": [
+          {
+            "resource": {}
+          },
+          {
+            "resource": {}
+          }
+        ]
+      },
+      {
+        "or": [
+          {
+            "cicdScan": {
+              "vulnerabilityFindingCount": {}
+            }
+          },
+          {
+            "cicdScan": {
+              "iacFindingCount": {}
+            }
+          },
+          {
+            "cicdScan": {
+              "secretFindingCount": {}
+            }
+          },
+          {
+            "cicdScan": {
+              "dataFindingCount": {}
+            }
+          },
+          {
+            "cicdScan": {
+              "hostConfigurationFindingCount": {}
+            }
+          },
+          {
+            "cicdScan": {
+              "malwareFindingCount": {}
+            }
+          },
+          {
+            "cicdScan": {
+              "softwareSupplyChainFindingCount": {}
+            }
+          },
+          {
+            "cicdScan": {
+              "sastFindingCount": {}
+            }
+          }
+        ]
+      },
+      {
+        "cicdScan": {
+          "resourceType": {},
+          "verdict": {},
+          "type": {},
+          "state": {},
+          "severities": {},
+          "hasTriggerableRemediation": {},
+          "hasFindingsIgnoredByCommentException": {},
+          "repositoryVisibility": {}
+        }
+      },
+      {},
+      {
+        "rawAuditLogRecordPath": {
+          "path": "cliDetails.clientVersion",
+          "startsWith": [
+            "0."
+          ]
+        }
+      }
+    ]
+  },
+  "includeCount": false
+}

@@ -1,0 +1,220 @@
+query CodeCICDScansTable($after: String, $first: Int, $filterBy: CloudEventFilters, $groupBy: CloudEventGroupBy, $orderDirection: OrderDirection, $projectId: [String!], $includeCount: Boolean!) {
+  cloudEvents(
+    filterBy: $filterBy
+    first: $first
+    after: $after
+    groupBy: $groupBy
+    orderDirection: $orderDirection
+    projectId: $projectId
+  ) {
+    nodes {
+      ... on CloudEventGroupByResult {
+        values
+        count: countV2 @include(if: $includeCount)
+        cloudEvents {
+          id
+          timestamp
+          cloudPlatform
+          category
+          hash
+          kind
+          externalName
+          origin
+          path
+          actor {
+            email
+            type
+            name
+            id
+            userAgent
+            providerUniqueId
+          }
+          subjectResource {
+            id
+            type
+            externalId
+            name
+            nativeType
+            region
+            cloudAccount {
+              cloudProvider
+              id
+              externalId
+            }
+            kubernetesCluster {
+              id
+              name
+              type
+            }
+            vcsRepository {
+              type
+              providerUniqueId
+              id
+              name
+            }
+            openToAllInternet
+          }
+          matchedRules {
+            rule {
+              builtInId
+              name
+              id
+            }
+          }
+          extraDetails {
+            ...CloudEventCICDScanDetailsExtraDetails
+          }
+        }
+      }
+      ... on CloudEvent {
+        id
+        timestamp
+        kind
+        origin
+        cloudPlatform
+        subjectResource {
+          id
+          name
+          type
+          vcsRepository {
+            type
+            providerUniqueId
+            id
+            name
+          }
+        }
+        actor {
+          email
+          type
+          name
+          id
+          userAgent
+          providerUniqueId
+        }
+        extraDetails {
+          ... on CloudEventCICDScanDetails {
+            ...CloudEventCICDScanDetailsExtraDetails
+          }
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    totalCount @include(if: $includeCount)
+    maxCountReached
+  }
+}
+    
+    fragment CloudEventCICDScanDetailsExtraDetails on CloudEventCICDScanDetails {
+  trigger
+  tags {
+    key
+    value
+  }
+  policies {
+    __typename
+    id
+    name
+    params {
+      __typename
+    }
+  }
+  createdBy {
+    serviceAccount {
+      id
+      name
+    }
+  }
+  cliDetails {
+    scanOriginResourceType
+    clientVersion
+    buildParams {
+      committedBy
+      repository
+      commitHash
+    }
+  }
+  executionDetails {
+    isDifferential
+    isForcedPass
+  }
+  malwareDetails {
+    analytics {
+      infoCount
+      lowCount
+      mediumCount
+      highCount
+      criticalCount
+      totalCount
+    }
+  }
+  analytics {
+    vulnerabilityScanResultAnalytics {
+      infoCount
+      lowCount
+      mediumCount
+      highCount
+      criticalCount
+    }
+    dataScanResultAnalytics {
+      infoCount
+      lowCount
+      mediumCount
+      highCount
+      criticalCount
+    }
+    iacScanResultAnalytics {
+      infoCount: infoMatches
+      lowCount: lowMatches
+      mediumCount: mediumMatches
+      highCount: highMatches
+      criticalCount: criticalMatches
+    }
+    secretScanResultAnalytics {
+      cloudKeyCount
+      dbConnectionStringCount
+      gitCredentialCount
+      passwordCount
+      privateKeyCount
+      saasAPIKeyCount
+      infoCount
+      lowCount
+      mediumCount
+      highCount
+      criticalCount
+      totalCount
+      infoCount
+      lowCount
+      mediumCount
+      highCount
+      criticalCount
+    }
+    sastScanResultAnalytics {
+      infoCount
+      lowCount
+      mediumCount
+      highCount
+      criticalCount
+    }
+  }
+  status {
+    details
+    state
+    verdict
+  }
+  codeAnalyzerDetails {
+    pullRequest {
+      id
+      infoURL
+      title
+    }
+  }
+  infoMatches
+  lowMatches
+  mediumMatches
+  highMatches
+  criticalMatches
+  hasTriggerableRemediation
+}
